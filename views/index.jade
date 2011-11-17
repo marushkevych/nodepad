@@ -1,0 +1,10 @@
+h1 Nodepad
+p Welcome to Nodepad
+
+form(action='/documents', method='post')
+    div
+        input(type='text', name='title', value= title)
+    div
+        textarea(name='data',rows="5", cols="20")= data
+    div
+        input(type='submit')= Submit
