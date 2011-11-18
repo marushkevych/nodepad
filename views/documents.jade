@@ -1,0 +1,12 @@
+p
+    a(href='/') Create new document
+
+ul
+  - for (var i in documents)
+    li
+        a(href='/documents/'+documents[i].id )= documents[i].title
+        div!= partial('part/document', { data: documents[i].data } )
+        form(method='post', action='/documents/' + documents[i].id)
+            input(name='document[id]', value=documents[i].id, type='hidden')
+            input(name='_method', value='DELETE', type='hidden')
+            input(type='submit', value='Delete')

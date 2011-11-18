@@ -1,0 +1,7 @@
+h2 New Document
+p
+    a(href='/documents') See all documents
+
+form(method='post', action='/documents')
+    !=partial('part/fields', { locals: { d: d } })
+

@@ -4,8 +4,8 @@ p Welcome to Nodepad!
 
 form(action='/documents', method='post')
     div
-        input(type='text', name='title', value= title)
+        input(type='text', name='title', value= d.title)
     div
-        textarea(name='data',rows="5", cols="20")= data
+        textarea(name='data',rows="5", cols="20")= d.data
     div
         input(type='submit')= Submit
