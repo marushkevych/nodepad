@@ -4,9 +4,16 @@ p
 ul
   - for (var i in documents)
     li
-        a(href='/documents/'+documents[i].id )= documents[i].title
+        a(class='button', href='/documents/'+documents[i].id )= documents[i].title 
+        a(class='button destroy', href='/documents/' + documents[i].id) Delete
+
         div!= partial('part/document', { data: documents[i].data } )
-        form(method='post', action='/documents/' + documents[i].id)
-            input(name='document[id]', value=documents[i].id, type='hidden')
-            input(name='_method', value='DELETE', type='hidden')
-            input(type='submit', value='Delete')
+
+
+
+
+        // commenting out delete form (handled dynamically with jquery)
+            form(method='post', action='/documents/' + documents[i].id)
+                input(name='document[id]', value=documents[i].id, type='hidden')
+                input(name='_method', value='DELETE', type='hidden')
+                input(type='submit', value='Delete')

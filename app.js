@@ -9,6 +9,7 @@ var express = require('express')
 var app = module.exports = express.createServer();
 
 
+
 // Configuration
 
 app.configure(function(){
@@ -16,6 +17,11 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
+    
+  // access to req.session
+  app.use(express.cookieParser());
+  app.use(express.session({ secret: "keyboard cat" }));
+    
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
@@ -30,10 +36,38 @@ app.configure('production', function(){
 });
 
 
+// authentication
+
+
+
+function checkLoggedIn(req, res, next) {
+
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
+
 
 // Routes
 
-app.get('/', routes.new);
+app.get('/register', function(req, res) {
+    res.render('register');
+});
+
+app.post('/register', routes.register);
+
+app.get('/login', function(req, res) {
+    res.render('login');
+});
+
+app.post('/login', routes.login);
+
+
+
+app.get('/', checkLoggedIn, routes.new);
 
 // List
 app.get('/documents', routes.list);

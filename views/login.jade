@@ -1,0 +1,11 @@
+p Please Login
+
+form(method='post', action='/login')
+    div
+      label Email:
+        input(name='user[name]')
+    div
+      label Password:
+        input(name='user[password]', type='password')
+    div
+      input(type='submit', value='Login')
