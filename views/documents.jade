@@ -1,5 +1,5 @@
 p
-    a(href='/') Create new document
+    a(href='/new') Create new document
 
 ul
   - for (var i in documents)
@@ -14,6 +14,5 @@ ul
 
         // commenting out delete form (handled dynamically with jquery)
             form(method='post', action='/documents/' + documents[i].id)
-                input(name='document[id]', value=documents[i].id, type='hidden')
                 input(name='_method', value='DELETE', type='hidden')
                 input(type='submit', value='Delete')

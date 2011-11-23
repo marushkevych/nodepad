@@ -80,6 +80,16 @@ exports.remove = function(req, res) {
     exports.list(req, res);
 };
 
+exports.getLogin = function(req, res) {
+    res.render('login',{layout: 'loggedout'});
+};
+
+exports.logout = function(req, res) {
+
+    console.log("logging out!");
+    req.session.user = null;
+    res.redirect('/sessions');
+};
 
 exports.login = function(req, res) {
 
@@ -88,21 +98,26 @@ exports.login = function(req, res) {
             if (user) {
 
                 // check password
-                if(user.password == req.body.user.password) {
+                if(user.authenticate(req.body.user.password)) {
                     req.session.user = user;
-                    exports.new(req, res);
+                    exports.list(req, res);
                 } else {
-                    res.render('login');
+                    exports.getLogin(req, res);
                 }
 
             } else {
-                res.render('login');
+                exports.getLogin(req, res);
             }
         });
     } else {
-        res.render('login');
+        exports.getLogin(req, res);
     }
 };
+
+exports.getRegister = function(req, res) {
+    var message = req.error || '';
+    res.render('register',{layout: 'loggedout', message: message});
+}
 
 exports.register = function(req, res) {
     var user = req.body.user;
@@ -114,10 +129,16 @@ exports.register = function(req, res) {
         instance.password = user.password;
 
         instance.save(function (err) {
-            //
+            if(err) {
+                console.log(err.message);
+                req.error = err;
+                exports.getRegister(req, res);
+            }
+            else {
+                exports.getLogin(req, res);
+            }
         });
-        res.render('login');
     } else {
-        res.render('register');
+        exports.getRegister(req, res);
     }
 };

@@ -1,6 +1,6 @@
 p Please Login
 
-form(method='post', action='/login')
+form(method='post', action='/sessions')
     div
       label Email:
         input(name='user[name]')
@@ -9,3 +9,6 @@ form(method='post', action='/login')
         input(name='user[password]', type='password')
     div
       input(type='submit', value='Login')
+
+p
+    a(href='/users') Register

@@ -45,7 +45,7 @@ function checkLoggedIn(req, res, next) {
     if (req.session.user) {
         next();
     } else {
-        res.redirect('/login');
+        res.redirect('/sessions');
     }
 }
 
@@ -53,36 +53,36 @@ function checkLoggedIn(req, res, next) {
 
 // Routes
 
-app.get('/register', function(req, res) {
-    res.render('register');
-});
+// logged-put
+app.get('/users', routes.getRegister);
 
-app.post('/register', routes.register);
+app.post('/users', routes.register);
 
-app.get('/login', function(req, res) {
-    res.render('login');
-});
+app.get('/sessions', routes.getLogin);
 
-app.post('/login', routes.login);
+app.post('/sessions', routes.login);
 
+app.del('/sessions', routes.logout);
 
 
-app.get('/', checkLoggedIn, routes.new);
+// logged-in
+app.get('/new', checkLoggedIn, routes.new);
 
 // List
-app.get('/documents', routes.list);
+app.get('/', checkLoggedIn, routes.list);
+app.get('/documents', checkLoggedIn, routes.list);
 
 // Create
-app.post('/documents', routes.create);
+app.post('/documents', checkLoggedIn, routes.create);
 
 // Read
-app.get('/documents/:id', routes.view);
+app.get('/documents/:id', checkLoggedIn, routes.view);
 
 // Update
-app.put('/documents/:id', routes.update);
+app.put('/documents/:id', checkLoggedIn, routes.update);
 
 // Delete
-app.del('/documents/:id', routes.remove);
+app.del('/documents/:id', checkLoggedIn, routes.remove);
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

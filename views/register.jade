@@ -1,6 +1,9 @@
 p Create account
 
-form(method='post', action='/register')
+- if (message)
+p= message
+
+form(method='post', action='/users')
     div
       label Email:
         input(name='user[name]')
@@ -9,3 +12,6 @@ form(method='post', action='/register')
         input(name='user[password]', type='password')
     div
       input(type='submit', value='Register')
+
+p
+    a(href='/sessions') Login
