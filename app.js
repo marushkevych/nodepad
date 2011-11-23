@@ -35,11 +35,14 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
+// expose session var to template
+app.dynamicHelpers({
+    session: function (req, res) {
+        return req.session;
+    }
+});
 
 // authentication
-
-
-
 function checkLoggedIn(req, res, next) {
 
     if (req.session.user) {

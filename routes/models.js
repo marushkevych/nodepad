@@ -12,13 +12,11 @@ var DocumentSchema = new Schema({
 });
 
 // user
-var doEncrypt = function (text) {
-    return crypto.createHmac('sha1', 'foo').update(text).digest('hex');
-};
-
 var UserSchema = new Schema({
-    name     : { type: String, unique: true }
+    name     : { type: String, set: toLower, unique: true }
   , password : { type: String, set: doEncrypt }
+  , salt     : { type: String, default: makeSalt}
+
 });
 
 UserSchema.methods.authenticate = function (password) {
@@ -26,6 +24,17 @@ UserSchema.methods.authenticate = function (password) {
 };
 
 UserSchema.methods.encryptPassword = doEncrypt;
+
+function makeSalt() {
+  return Math.round((new Date().valueOf() * Math.random())) + '';
+}
+function doEncrypt(text) {
+    return crypto.createHmac('sha1', this.salt).update(text).digest('hex');
+}
+
+function toLower(value) {
+    return value.toLowerCase();
+}
 
 
 exports.Document = mongoose.model('Document', DocumentSchema);
