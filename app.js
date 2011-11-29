@@ -40,10 +40,12 @@ app.dynamicHelpers({
     session: function (req, res) {
         return req.session;
     }
+
 });
 
-// authentication
+// user session check middleware
 function checkLoggedIn(req, res, next) {
+
 
     if (req.session.user) {
         next();
@@ -55,6 +57,9 @@ function checkLoggedIn(req, res, next) {
 
 
 // Routes
+app.get('/error', function (req, res){
+    res.send(req.session.error);
+});
 
 // logged-put
 app.get('/users', routes.getRegister);
@@ -68,11 +73,11 @@ app.post('/sessions', routes.login);
 app.del('/sessions', routes.logout);
 
 
+app.get('/', checkLoggedIn, routes.list);
+
 // logged-in
 app.get('/new', checkLoggedIn, routes.new);
-
 // List
-app.get('/', checkLoggedIn, routes.list);
 app.get('/documents', checkLoggedIn, routes.list);
 
 // Create

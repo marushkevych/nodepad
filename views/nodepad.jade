@@ -1,0 +1,34 @@
+#left.outline-view
+  #DocumentTitles
+    ul#document-list
+      - for (var d in documents)
+        li
+            a(data-id=documents[d].id)= documents[d].title
+
+            form(method='post' )
+                input(name='document[title]', value=documents[d].title)
+
+  ul.toolbar
+    li
+      a(href='/new', id='new-document')
+        +
+    li
+      a(href='#', id='delete-document')
+        -
+
+.content-divider
+
+.content
+  #editor-container
+    textarea(name='d[data]', id='editor')
+
+ul(id='controls',class='toolbar')
+  li
+    a(href='#', id='save-button') Save
+
+script(type='text/javascript', src='/javascripts/application.js')
+script(type='text/javascript', src='/javascripts/json2.js')
+
+
+
+

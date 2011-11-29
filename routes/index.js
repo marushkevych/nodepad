@@ -6,8 +6,6 @@ var Document =  require('./models.js').Document;
 var User =  require('./models.js').User;
 
 
-
-
 exports.new = function(req, res){
   //res.render('index', {d:{ title: '', data: '' }})
   res.render('new', {d: new Document()})
@@ -17,8 +15,11 @@ exports.new = function(req, res){
 
 exports.list = function(req, res) {
     Document.find({}, function (err, docs) {
+        if(err) throw err;
+        
         if(req.accepts('html')) {
-            res.render('documents', { documents: docs });
+            //res.render('documents', { documents: docs });
+            res.render('nodepad', { documents: docs });
         } else {
             res.send(docs);
         }
@@ -29,20 +30,18 @@ exports.list = function(req, res) {
 
 exports.create = function(req, res) {
     var doc = req.body.document;
-    if(!doc.title || !doc.data)
-    {
-        //routes.index(req, res);
-        res.render('new', {d:doc});
-        return;
-    }
     var instance = new Document();
     instance.title = doc.title;
     instance.data = doc.data;
     instance.save(function (err) {
-      //
+        if(err) throw err;
     });
 
-    res.render('confirm', doc);
+    if(req.accepts('html')) {
+        res.render('confirm', instance);
+    } else {
+        res.send(instance._id);
+    }
 };
 
 
@@ -59,22 +58,19 @@ exports.view = function(req, res) {
 exports.update = function(req, res) {
     var doc = req.body.document;
     var conditions = { _id: req.params.id };
-    var update = { title: doc.title, data: doc.data};
+    // updates can only be for data or for title
+    var update = doc.data ? {data: doc.data} : {title: doc.title};
     var options = { multi: false };
 
     Document.update(conditions, update, options, function (err, doc) {
-        console.log(err);
-        console.log(doc);
+        if(err) throw err;
     });
-
-    exports.list(req, res);
 };
 
 exports.remove = function(req, res) {
     var doc = req.body.document;
     Document.remove({ _id: req.params.id }, function (err, doc) {
-        console.log(err);
-        console.log(doc);
+        if(err) throw err;
     });
 
     exports.list(req, res);

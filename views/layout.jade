@@ -2,10 +2,21 @@
 html
   head
     title Nodepad
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js')
-  body
 
+    link(rel='stylesheet', href='/css/Aristo/Aristo.css')
+    link(rel='stylesheet', href='/css/style.css')
+    script(type='text/javascript', src='http://code.jquery.com/jquery-1.6.1.min.js')
+    script(type='text/javascript', src='http://code.jquery.com/ui/1.8.13/jquery-ui.min.js')
+
+    script
+        $(function(){
+
+            // Button
+            $("#divButton, #linkButton, #submitButton, #inputButton").button();
+
+        });
+
+  body
     p Logged in as #{session.user.name}
 
     p
@@ -18,5 +29,4 @@ html
     
     != body
 
-    script(type='text/javascript', src='/javascripts/application.js')
 
