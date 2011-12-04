@@ -16,13 +16,13 @@ exports.new = function(req, res){
 exports.list = function(req, res) {
     Document.find({}, function (err, docs) {
         if(err) throw err;
-        
-        if(req.accepts('html')) {
-            //res.render('documents', { documents: docs });
-            res.render('nodepad', { documents: docs });
-        } else {
-            res.send(docs);
-        }
+        res.send(docs);
+//        if(req.accepts('html')) {
+//            //res.render('documents', { documents: docs });
+//            res.render('nodepad', { documents: docs });
+//        } else {
+//            res.send(docs);
+//        }
     });
 
 };
@@ -59,8 +59,12 @@ exports.update = function(req, res) {
     var doc = req.body.document;
     var conditions = { _id: req.params.id };
     // updates can only be for data or for title
-    var update = doc.data ? {data: doc.data} : {title: doc.title};
+    var update = {data: doc.data, title: doc.title};
     var options = { multi: false };
+    
+    console.log(req.params.id);
+    console.log(doc.title);
+    console.log(doc.data);
 
     Document.update(conditions, update, options, function (err, doc) {
         if(err) throw err;
