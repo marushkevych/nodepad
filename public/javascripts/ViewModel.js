@@ -2,32 +2,38 @@ jQuery(function($){
 
 // note UI object
 function Note(id, title, data) {
-    this.id = ko.observable( id || '');
+    this.id = id || '';
     this.title = ko.observable( title || 'new');
     this.data = ko.observable( data || '');
     this.enableEditTitle = ko.observable(false);
 
     this.dblclick = function() {
         this.enableEditTitle(true);
-        $('#'+this.id()).select();
-    }
+        $('#'+this.id).select();
+    };
 
+
+    this.submitTitle = function() {
+        this.saveTitle();
+        $('#editor').select();
+    };
 
     this.saveTitle = function() {
+        
         console.log('saving title');
         this.enableEditTitle(false);
 
         $.ajax({
-            url: '/documents/' + this.id(),
+            url: '/documents/' + this.id,
             type: 'PUT',
             data: {document: this.json()},
             dataType: 'json',
             success: function(data) {}
         });
-    }
+    };
 
     this.json = function() {
-        return {_id: this.id(), title: this.title(), data: this.data()};
+        return {_id: this.id, title: this.title(), data: this.data()};
     }
 
 }
@@ -55,7 +61,7 @@ function ViewModel() {
         var that = this;
         var params = { document: {title:note.title(), data:note.data()} };
         $.post('/documents/', params, function(id) {
-            note.id(id);
+            note.id=id;
             that.notes.push(note);
             that.selectNote(note);
             note.dblclick();
@@ -65,7 +71,7 @@ function ViewModel() {
     };
 
     this.deleteNote = function(){
-        var id = this.selectedNote().id();
+        var id = this.selectedNote().id;
         if(!id) {
             return;
         }
@@ -77,8 +83,8 @@ function ViewModel() {
             type: 'DELETE',
             dataType: 'json',
             success: function(data) {
-
                 that.notes.remove(that.selectedNote());
+                that.selectedNote(new Note());
             }
         });
     };
@@ -86,7 +92,7 @@ function ViewModel() {
 
     this.save = function(){
         var note = this.selectedNote();
-        var id = note.id();
+        var id = note.id;
         if(!id) {
             return;
         }

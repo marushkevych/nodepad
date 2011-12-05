@@ -18,7 +18,9 @@
     <div id='DocumentTitles'>
 
         <!-- Notes -->
-        <ul id='document-list' data-bind="template: { name: displayMode.bind(viewModel), foreach: notes }"></ul>
+        <ul id='document-list' data-bind="template: { name: displayMode.bind(viewModel), foreach: notes }">
+        </ul>
+        
 
     </div>
 
@@ -32,7 +34,7 @@
     <div id='editor-container'>
         <!--
         -->
-        <textarea id='editor' data-bind="value: selectedNote().data" cols="30" rows="10"></textarea>
+        <textarea id='editor' data-bind="value: selectedNote().data, event: {blur: save.bind(viewModel)}" cols="30" rows="10"></textarea>
     </div>
 </div>
 
@@ -52,7 +54,7 @@
 
 <script type="text/html" id="showNoteTitle">
 <li>
-<a href="" data-bind="css: {selected: $data.id() == viewModel.selectedNote().id()}, click: function() {viewModel.selectNote($data)}, event: {dblclick: $data.dblclick.bind($data)}">
+<a href="" data-bind="css: {selected: $data.id == viewModel.selectedNote().id}, click: function() {viewModel.selectNote($data)}, event: {dblclick: $data.dblclick.bind($data)}">
     ${title}
 </a>
 </li>
@@ -60,6 +62,8 @@
 
 <script type="text/html" id="editNoteTitle">
 <li>
-<input name='document[title]' data-bind="attr: {id: $data.id}, value: $data.title, event: {blur: $data.saveTitle.bind($data)}" >
+    <form method='post' data-bind='submit: $data.submitTitle.bind($data)'>
+    <input name='document[title]' data-bind="attr: {id: $data.id}, value: $data.title, event: {blur: $data.saveTitle.bind($data)}" >
+    </form>
 </li>
 </script>

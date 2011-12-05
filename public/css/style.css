@@ -89,9 +89,6 @@ form {
     margin: 7px 10px;
 }
 
-.outline-view ul form {
-    display: none;
-}
 
 .outline-view ul .selected {
     font-weight: bold;
