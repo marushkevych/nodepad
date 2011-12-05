@@ -4,7 +4,7 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
+  , routes = require('./routes');
 
 var app = module.exports = express.createServer();
 
@@ -73,24 +73,24 @@ app.post('/sessions', routes.login);
 app.del('/sessions', routes.logout);
 
 
+// logged-in
 app.get('/', checkLoggedIn, routes.list);
 
-// logged-in
-app.get('/new', checkLoggedIn, routes.new);
+// Search
+app.get('/autocomplete', routes.autocomplete);
+app.get('/search', routes.search);
+
+app.get('/new', routes.new);
 // List
-app.get('/documents', checkLoggedIn, routes.list);
-
+app.get('/documents', routes.list);
 // Create
-app.post('/documents', checkLoggedIn, routes.create);
-
+app.post('/documents', routes.create);
 // Read
-app.get('/documents/:id', checkLoggedIn, routes.view);
-
+app.get('/documents/:id', routes.view);
 // Update
-app.put('/documents/:id', checkLoggedIn, routes.update);
-
+app.put('/documents/:id', routes.update);
 // Delete
-app.del('/documents/:id', checkLoggedIn, routes.remove);
+app.del('/documents/:id', routes.remove);
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

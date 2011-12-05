@@ -9,9 +9,17 @@
     <script type='text/javascript' src='/javascripts/knockout-1.2.1.js'></script>
     <script type='text/javascript' src='/javascripts/knockout.address.js'></script>
     <script type='text/javascript' src='/javascripts/ViewModel.js'></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.8.13/jquery-ui.min.js"></script>
     <link href="/css/style.css" type="text/css" rel="stylesheet">
+    <link href="/css/Aristo/Aristo.css" type="text/css" rel="stylesheet" />
 </head>
-<body>
+<body class="ui-form">
+<div class="ui-widget">
+    <form method='post' id='searchForm' data-bind='submit: submitSearch.bind(viewModel)'>
+	    <label for="search">Search notes: </label>
+	    <input id="search" class="ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+    </form>
+</div>
 
 <div id='left' class='outline-view'>
 

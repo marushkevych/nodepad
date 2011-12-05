@@ -12,17 +12,54 @@ exports.new = function(req, res){
 
 };
 
+function logObject(o)
+{
+    for(var i in o){
+        console.log(i +'='+o[i]);
+    }
+}
+
+exports.autocomplete = function(req, res) {
+    var term = req.query["term"];
+    var regex = new RegExp(term, 'i');
+
+    Document.find({title: regex}, ['title'], function (err, docs) {
+        if(err) throw err;
+
+        var result = [];
+        for(var i in docs) {
+            result.push(docs[i].title);
+        }
+
+        res.send(result);
+    });
+
+};
+
+exports.search = function(req, res) {
+
+    var term = req.query["term"];
+    var query = {};
+    if(term) query.title = new RegExp(term, 'i');
+
+    Document.find(query, function (err, docs) {
+        if(err) throw err;
+
+        res.send(docs);
+    });
+
+};
 
 exports.list = function(req, res) {
     Document.find({}, function (err, docs) {
         if(err) throw err;
-        res.send(docs);
-//        if(req.accepts('html')) {
-//            //res.render('documents', { documents: docs });
-//            res.render('nodepad', { documents: docs });
-//        } else {
-//            res.send(docs);
-//        }
+
+        if(req.accepts('html')) {
+            //res.render('documents', { documents: docs });
+            res.render('nodepad', { documents: docs });
+        } else {
+            res.send(docs);
+        }
     });
 
 };
@@ -46,6 +83,8 @@ exports.create = function(req, res) {
 
 
 exports.view = function(req, res) {
+
+
     Document.findById(req.params.id, function (err, doc){
         if(req.accepts('html')) {
             res.render('edit', {d:doc});
@@ -100,7 +139,8 @@ exports.login = function(req, res) {
                 // check password
                 if(user.authenticate(req.body.user.password)) {
                     req.session.user = user;
-                    exports.list(req, res);
+                    //exports.list(req, res);
+                    res.redirect('/view.html');
                 } else {
                     exports.getLogin(req, res);
                 }
